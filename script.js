@@ -1,6 +1,6 @@
 let xp = 0
 let hp = 100
-let gold = 50
+let gold = 500
 let currentWeapon = 0
 let fighting
 let monsterHealth
@@ -88,10 +88,6 @@ function goCave() {
   update(locations[2])
 }
 
-function fightDragon() {
-  console.log('Fighting Dragon.')
-}
-
 function buyHp() {
   if (gold >= 10) {
     gold -= 10
@@ -124,8 +120,22 @@ function buyWeapon() {
   }
 }
 
-function sellWeapon() { }
+function sellWeapon() {
+  if (inventory.length > 1) {
+    gold += 15
+    gold.innerText = gold
+    let currentWeapon = inventory.shift()
+    text.innerText = "You sold a " + currentWeapon + "."
+    text.innerText += " In your inventory you have: " + inventory
+  } else {
+    text.innerText = "Don't sell your only weapon!"
+  }
+}
 
 function fightSlime() { }
 
 function fightFangedBeast() { }
+
+function fightDragon() {
+  console.log('Fighting Dragon.')
+}
