@@ -299,20 +299,24 @@ function pickEight() {
 }
 
 function pick(guess) {
+  // pick random numbers
   let numbers = []
   while (numbers.length < 10) {
     numbers.push(Math.floor(Math.random() * 11))
   }
 
+  // write down numbers
   text.innerText = "You picked " + guess + ". Here are the random numbers: \n"
-
   for (let i = 0; i < numbers.length; i++) {
     text.innerText += numbers[i] + "\n"
   }
 
-  if (numbers.indexOf(guess) !== -1) {
-    text.innerText += "Correct! You win 20 gold!"
-    gold += 20
+  // count the guesses and provide a reward
+  let count = countNumbers(guess, numbers)
+  if (count > 0) {
+    let value = Math.floor(Math.random() * 20) * count + 10
+    text.innerText += "Correct! You win " + value + " gold!"
+    gold += value
     goldText.innerText = gold
   } else {
     text.innerText += "Wrong! You lose 10 health!"
@@ -322,4 +326,23 @@ function pick(guess) {
       lose()
     }
   }
+
+  // Change buttons to go to town
+  let location = locations[1]
+  button1.innerText = location['button text'][2]
+  button2.innerText = location['button text'][2]
+  button3.innerText = location['button text'][2]
+  button1.onclick = location['button functions'][2]
+  button2.onclick = location['button functions'][2]
+  button3.onclick = location['button functions'][2]
+}
+
+function countNumbers(guess, numbers) {
+  let count = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] === guess) {
+      count++
+    }
+  }
+  return count;
 }
