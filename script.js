@@ -1,6 +1,6 @@
 let xp = 0
 let hp = 100
-let gold = 500
+let gold = 50
 let currentWeapon = 0
 let fighting
 let monsterHealth
@@ -36,6 +36,24 @@ const weapons = [
   }
 ]
 
+const monsters = [
+  {
+    name: "Slime",
+    level: 2,
+    health: 15,
+  },
+  {
+    name: "Fanged Beast",
+    level: 8,
+    health: 60,
+  },
+  {
+    name: "Dragon",
+    level: 20,
+    health: 300,
+  }
+]
+
 const locations = [
   {
     name: 'Town Square',
@@ -58,6 +76,24 @@ const locations = [
     'button text': ['Fight slime', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSlime, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
+  },
+  {
+    name: 'Fight',
+    'button text': ['Attack', 'Dodge', 'Flee'],
+    'button functions': [attack, dodge, goTown],
+    text: 'You are fighting a monster'
+  },
+  {
+    name: 'Kill Monster',
+    'button text': ['Go to town square', 'Go to town square', 'Go to town square'],
+    'button functions': [goTown, goTown, goTown],
+    text: 'The monster screams \"Arg!\" As it dies. You gain experience and find gold.'
+  },
+  {
+    name: 'Lose',
+    'button text': ['Replay?', 'Replay?', 'Replay?'],
+    'button functions': [restart, restart, restart],
+    text: 'You die...'
   }
 ]
 
@@ -67,6 +103,7 @@ button2.onclick = goCave
 button3.onclick = fightDragon
 
 function update(location) {
+  monsterStats.style.display = "none"
   button1.innerText = location['button text'][0]
   button2.innerText = location['button text'][1]
   button3.innerText = location['button text'][2]
@@ -78,6 +115,7 @@ function update(location) {
 
 function goTown() {
   update(locations[0])
+
 }
 
 function goStore() {
@@ -132,10 +170,72 @@ function sellWeapon() {
   }
 }
 
-function fightSlime() { }
+function fightSlime() {
+  fighting = 0
+  goFight()
+}
 
-function fightFangedBeast() { }
+function fightFangedBeast() {
+  fighting = 1
+  goFight()
+}
 
 function fightDragon() {
-  console.log('Fighting Dragon.')
+  fighting = 2
+  goFight()
+}
+
+function goFight() {
+  update(locations[3])
+  monsterHealth = monsters[fighting].health
+  monsterHealthText.innerText = monsterHealth
+  monsterNameText.innerText = monsters[fighting].name
+  monsterStats.style.display = "block"
+}
+
+function attack() {
+  text.innerText = "The " + monsters[fighting].name + " attacks. "
+  text.innerText = "You attack it with your " + weapons[currentWeapon].name + ". "
+  hp -= monsters[fighting].level
+  monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
+  hpText.innerText = hp
+  monsterHealthText.innerText = monsterHealth
+
+  if (hp <= 0) {
+    lose()
+  }
+  else if (monsterHealth <= 0) {
+    defeatMonster()
+  }
+}
+
+function dodge() {
+  text.innerText = "You dodged the attack from the " + monsters[fighting].name + "."
+
+}
+
+function lose() {
+  update(locations[5])
+}
+
+function defeatMonster() {
+  gold += Math.floor(monsters[fighting].level * 6.7)
+  xp += monsters[fighting].level
+  goldText.innerText = gold
+  xpText.innerText = xp
+  update(locations[4])
+}
+
+function restart() {
+  let xp = 0
+  let hp = 100
+  let gold = 500
+  let currentWeapon = 0
+  let fighting
+  let monsterHealth
+  let inventory = ['stick']
+  goldText.innerText = gold
+  hpText.innerText = hp
+  xpText.innerText = xp
+  goTown()
 }
