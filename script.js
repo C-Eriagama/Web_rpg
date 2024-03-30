@@ -94,6 +94,12 @@ const locations = [
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'You die...'
+  },
+  {
+    name: 'Win',
+    'button text': ['Replay?', 'Replay?', 'Replay?'],
+    'button functions': [restart, restart, restart],
+    text: 'You defeat the dragon! YOU WIN THE GAME!'
   }
 ]
 
@@ -196,7 +202,6 @@ function goFight() {
 function attack() {
   text.innerText = "The " + monsters[fighting].name + " attacks. "
   text.innerText = "You attack it with your " + weapons[currentWeapon].name + ". "
-  hp -= monsters[fighting].level
   monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
   hpText.innerText = hp
   monsterHealthText.innerText = monsterHealth
@@ -205,7 +210,7 @@ function attack() {
     lose()
   }
   else if (monsterHealth <= 0) {
-    defeatMonster()
+    fighting === 2 ? winGame() : defeatMonster()
   }
 }
 
@@ -214,16 +219,20 @@ function dodge() {
 
 }
 
-function lose() {
-  update(locations[5])
-}
-
 function defeatMonster() {
   gold += Math.floor(monsters[fighting].level * 6.7)
   xp += monsters[fighting].level
   goldText.innerText = gold
   xpText.innerText = xp
   update(locations[4])
+}
+
+function lose() {
+  update(locations[5])
+}
+
+function winGame() {
+  update(locations[6])
 }
 
 function restart() {
@@ -239,3 +248,5 @@ function restart() {
   xpText.innerText = xp
   goTown()
 }
+
+
