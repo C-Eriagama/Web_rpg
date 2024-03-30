@@ -19,19 +19,19 @@ const monsterHealthText = document.querySelector('#monsterHealth')
 
 const weapons = [
   {
-    name: 'Stick',
+    name: 'stick',
     power: 5
   },
   {
-    name: 'Dagger',
+    name: 'dagger',
     power: 30
   },
   {
-    name: 'Claw Hammer',
+    name: 'claw hammer',
     power: 50
   },
   {
-    name: 'Sword',
+    name: 'sword',
     power: 100
   }
 ]
@@ -207,18 +207,24 @@ function goFight() {
 }
 
 function attack() {
-  text.innerText = 'The ' + monsters[fighting].name + ' attacks. '
-  text.innerText = 'You attack it with your ' + weapons[currentWeapon].name + '. '
+  //monster attacks
+  text.innerText = 'The ' + monsters[fighting].name + ' attacks '
+  let damageTaken = getMonsterAttackValue(monsters[fighting].level)
+  updateHp(hp - damageTaken)
+  text.innerText += " you for " + damageTaken + " damage."
 
+
+  text.innerText += 'You attack it with your ' + weapons[currentWeapon].name + ' '
   //attack monster
   if (isMonsterHit()) {
-    updateHp(hp - getMonsterAttackValue(monsters[fighting].level))
+    let damageDealt = weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
+    updateMonsterHealth(monsterHealth - damageDealt)
+    text.innerText += " for " + damageDealt + " damage."
   } else {
-    text.innerText += ' You miss.'
+    text.innerText += ' and you miss.'
   }
 
-  // update stats
-  updateMonsterHealth(monsterHealth - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1)
+
 
   // check fight result
   if (hp <= 0) {
@@ -228,7 +234,7 @@ function attack() {
   }
 
   // weapon breaks
-  if (Math.random() <= 0.1 && inventory.length !== 1) {
+  if (Math.random() <= 0.08 && inventory.length !== 1) {
     text.innerText += 'Your ' + inventory.pop() + ' breaks.'
     currentWeapon--
   }
@@ -249,10 +255,15 @@ function dodge() {
 }
 
 function defeatMonster() {
-  updateGold(gold + Math.floor(monsters[fighting].level * 6.7))
-  updateXp(xp + monsters[fighting].level)
+  let xpGained = monsters[fighting].level
+  let goldGained = Math.floor(monsters[fighting].level * 6.7)
+  locations[4].text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
+  updateGold(gold + goldGained)
+  updateXp(xp + xpGained)
   update(locations[4])
 }
+
+
 
 function lose() {
   update(locations[5])
