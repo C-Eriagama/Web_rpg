@@ -116,6 +116,7 @@ button2.onclick = goCave
 button3.onclick = fightDragon
 
 function update(location) {
+  // Chance of easter egg when heading to town
   if (location === locations[0]) {
     if (Math.random() < 0.1) {
       location = locations[7]
@@ -145,10 +146,8 @@ function goCave() {
 
 function buyHp() {
   if (gold >= 10) {
-    gold -= 10
-    hp += 10
-    goldText.innerText = gold
-    hpText.innerText = hp
+    updateGold(gold - 10)
+    updateHp(hp + 10)
     text.innerText = 'You have bought extra 10 health.'
   } else {
     text.innerText = 'You do not have enough gold to buy health.'
@@ -158,9 +157,8 @@ function buyHp() {
 function buyWeapon() {
   if (currentWeapon < weapons.length - 1) {
     if (gold >= 30) {
-      gold -= 30
+      updateGold(gold - 30)
       currentWeapon++
-      goldText.innerText = gold
       let newWeapon = weapons[currentWeapon].name
       text.innerText = 'You now have a ' + newWeapon + '.'
       inventory.push(newWeapon)
@@ -177,8 +175,7 @@ function buyWeapon() {
 
 function sellWeapon() {
   if (inventory.length > 1) {
-    gold += 15
-    gold.innerText = gold
+    updateGold(gold + 15)
     let currentWeapon = inventory.shift()
     text.innerText = 'You sold a ' + currentWeapon + '.'
     text.innerText += ' In your inventory you have: ' + inventory
@@ -204,29 +201,24 @@ function fightDragon() {
 
 function goFight() {
   update(locations[3])
-  monsterHealth = monsters[fighting].health
-  monsterHealthText.innerText = monsterHealth
+  updateMonsterHealth(monsters[fighting].health)
   monsterNameText.innerText = monsters[fighting].name
   monsterStats.style.display = 'block'
 }
 
 function attack() {
   text.innerText = 'The ' + monsters[fighting].name + ' attacks. '
-  text.innerText =
-    'You attack it with your ' + weapons[currentWeapon].name + '. '
+  text.innerText = 'You attack it with your ' + weapons[currentWeapon].name + '. '
 
   //attack monster
   if (isMonsterHit()) {
-    hp -= getMonsterAttackValue(monsters[fighting].level)
+    updateHp(hp - getMonsterAttackValue(monsters[fighting].level))
   } else {
     text.innerText += ' You miss.'
   }
 
   // update stats
-  monsterHealth -=
-    weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
-  hpText.innerText = hp
-  monsterHealthText.innerText = monsterHealth
+  updateMonsterHealth(monsterHealth - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1)
 
   // check fight result
   if (hp <= 0) {
@@ -257,10 +249,8 @@ function dodge() {
 }
 
 function defeatMonster() {
-  gold += Math.floor(monsters[fighting].level * 6.7)
-  xp += monsters[fighting].level
-  goldText.innerText = gold
-  xpText.innerText = xp
+  updateGold(gold + Math.floor(monsters[fighting].level * 6.7))
+  updateXp(xp + monsters[fighting].level)
   update(locations[4])
 }
 
@@ -273,16 +263,11 @@ function winGame() {
 }
 
 function restart() {
-  let xp = 0
-  let hp = 100
-  let gold = 500
-  let currentWeapon = 0
-  let fighting
-  let monsterHealth
-  let inventory = ['stick']
-  goldText.innerText = gold
-  hpText.innerText = hp
-  xpText.innerText = xp
+  updateXp(0)
+  updateHp(100)
+  updateGold(50)
+  currentWeapon = 0
+  inventory = ['stick']
   goTown()
 }
 
@@ -316,12 +301,10 @@ function pick(guess) {
   if (count > 0) {
     let value = Math.floor(Math.random() * 20) * count + 10
     text.innerText += "Correct! You win " + value + " gold!"
-    gold += value
-    goldText.innerText = gold
+    updateGold(gold + value)
   } else {
     text.innerText += "Wrong! You lose 10 health!"
-    hp -= 10
-    hpText.innerText = hp
+    updateHp(hp - 10)
     if (hp <= 0) {
       lose()
     }
@@ -338,11 +321,33 @@ function pick(guess) {
 }
 
 function countNumbers(guess, numbers) {
-  let count = 0;
+  let count = 0
   for (let i = 0; i < numbers.length; i++) {
     if (numbers[i] === guess) {
       count++
     }
   }
-  return count;
+  return count
 }
+
+function updateHp(value) {
+  hp = value
+  hpText.innerText = hp
+}
+
+function updateGold(value) {
+  gold = value
+  goldText.innerText = gold
+}
+
+function updateXp(value) {
+  xp = value
+  xpText.innerText = xp
+}
+
+function updateMonsterHealth(value) {
+  monsterHealth = value
+  monsterHealthText.innerText = monsterHealth
+}
+
+
