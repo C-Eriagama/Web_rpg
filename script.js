@@ -7,6 +7,7 @@ let nextMonster;
 let monsterHealth
 let inventory = ["stick"];
 
+const controls = document.querySelector('#controls')
 const button1 = document.querySelector('#button1')
 const button2 = document.querySelector('#button2')
 const button3 = document.querySelector('#button3')
@@ -18,6 +19,7 @@ const powerText = document.querySelector('#powerText')
 const monsterStats = document.querySelector('#monsterStats')
 const monsterNameText = document.querySelector('#monsterName')
 const monsterHealthText = document.querySelector('#monsterHealth')
+const easterEggButtons = document.querySelector('#easterEggButtons')
 
 const weapons = [
   {
@@ -87,8 +89,8 @@ const locations = [
   },
   {
     name: 'Kill Monster',
-    'button text': ['Go to town square', 'Go to town square', 'Go to town square'],
-    'button functions': [goTown, goTown, goTown],
+    'button text': ['Continue in cave', 'Return to town square', 'Return to town square'],
+    'button functions': [goCave, goTown, goTown],
     text: 'The monster screams "Arg!" As it dies. You gain experience and find gold.'
   },
   {
@@ -123,8 +125,11 @@ function update(location) {
   if (location === locations[0]) {
     if (Math.random() < 0.05) {
       easterEgg()
+      return;
     }
   }
+  easterEggButtons.style.display = "none"
+  controls.style.display = "block"
   monsterStats.style.display = 'none'
   button1.innerText = location['button text'][0]
   button2.innerText = location['button text'][1]
@@ -237,7 +242,7 @@ function attack() {
   //attack monster
   text.innerText = 'You attack it with your ' + weapons[currentWeapon].name + ' '
   if (isMonsterHit()) {
-    let damageDealt = weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
+    let damageDealt = Math.floor(weapons[currentWeapon].power * (Math.random() * 0.2 + 0.9))
 
     //crit chance
     if (Math.random() < 0.1) {
@@ -259,17 +264,12 @@ function attack() {
   }
 
   monsterAttack()
-  // check fight result
-  if (hp <= 0) {
-    lose()
-  } else if (monsterHealth <= 0) {
-    fighting === 2 ? winGame() : defeatMonster()
-  }
+  fightOutcome()
 }
 
 function getMonsterAttackValue(level) {
-  let hit = level * 4 - Math.floor(Math.random() * xp)
-  hit = Math.floor(hit * (Math.random() + 0.5))
+  let hit = level * 5 - Math.floor(Math.random() * xp / 5) //adjust damage based on xp
+  hit = Math.floor(hit * (Math.random() + 0.6)) // random variance in damage 0.6x go 1.6x
   return hit <= 0 ? 1 : hit
 }
 
@@ -284,10 +284,19 @@ function dodge() {
     text.innerText = "You failed to dodge the attack. "
     monsterAttack()
   }
+  fightOutcome()
+}
+
+function fightOutcome() {
+  if (hp <= 0) {
+    lose()
+  } else if (monsterHealth <= 0) {
+    fighting === 2 ? winGame() : defeatMonster()
+  }
 }
 
 function defeatMonster() {
-  let xpGained = Math.floor(monsters[fighting].level * (Math.random() * 1.5 + 1))
+  let xpGained = Math.floor(monsters[fighting].level * (Math.random() * + 1) + 2)
   let goldGained = Math.floor(monsters[fighting].level * (Math.random() * 4 + 2) + 10)
   locations[4].text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
   updateGold(gold + goldGained)
@@ -318,7 +327,16 @@ function restart() {
 }
 
 function easterEgg() {
-  update(locations[7])
+  easterEggButtons.style.display = "block"
+  controls.style.display = "none"
+  monsterStats.style.display = 'none'
+  text.innerText = locations[7].text
+  let children = easterEggButtons.childNodes
+  console.log(children)
+  for (let i = 0; i < 10; i++) {
+    children.item(2 * i + 1).onclick = function () { pick(i) }
+  }
+  children.item(21).onclick = goTown
 }
 
 function pickTwo() {
@@ -357,6 +375,8 @@ function pick(guess) {
   }
 
   // Change buttons to go to town
+  easterEggButtons.style.display = "none"
+  controls.style.display = "block"
   let location = locations[1]
   button1.innerText = location['button text'][2]
   button2.innerText = location['button text'][2]

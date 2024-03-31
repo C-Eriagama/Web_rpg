@@ -39,3 +39,9 @@ body {
 .stat {
   padding-right: 10px;
 }
+
+#easterEggButtons{
+  display: none;
+  border: 1px black solid;
+  padding: 5px;
+}
