@@ -1,7 +1,11 @@
-let currentWeapon = 0
-let fighting
+let xp;
+let health;
+let gold;
+let currentWeapon;
+let fighting;
+let nextMonster;
 let monsterHealth
-let inventory = ['stick']
+let inventory = ["stick"];
 
 const button1 = document.querySelector('#button1')
 const button2 = document.querySelector('#button2')
@@ -14,11 +18,6 @@ const powerText = document.querySelector('#powerText')
 const monsterStats = document.querySelector('#monsterStats')
 const monsterNameText = document.querySelector('#monsterName')
 const monsterHealthText = document.querySelector('#monsterHealth')
-
-updateXp(0)
-updateHp(100)
-updatePower(5)
-updateGold(0)
 
 const weapons = [
   {
@@ -117,12 +116,13 @@ const locations = [
 button1.onclick = goStore
 button2.onclick = goCave
 button3.onclick = fightDragon
+restart()
 
 function update(location) {
   // Chance of easter egg when heading to town
   if (location === locations[0]) {
-    if (Math.random() < 0.1) {
-      location = locations[7]
+    if (Math.random() < 0.05) {
+      easterEgg()
     }
   }
   monsterStats.style.display = 'none'
@@ -132,6 +132,10 @@ function update(location) {
   button1.onclick = location['button functions'][0]
   button2.onclick = location['button functions'][1]
   button3.onclick = location['button functions'][2]
+  button1.disabled = false;
+  button2.disabled = false;
+  button3.disabled = false;
+
   text.innerText = location.text
 }
 
@@ -145,6 +149,9 @@ function goStore() {
 
 function goCave() {
   update(locations[2])
+  if (nextMonster < 1) {
+    button2.disabled = true;
+  }
 }
 
 function buyHp() {
@@ -217,7 +224,7 @@ function monsterAttack() {
   text.innerText += ' The ' + monsters[fighting].name + ' attacks '
   let damageTaken = getMonsterAttackValue(monsters[fighting].level)
   //Monster misses
-  if (Math.random < 0.05) {
+  if (Math.random() < 0.05) {
     damageTaken = 0
     text.innerText += " but you dodged the attack."
   } else {
@@ -240,25 +247,23 @@ function attack() {
       text.innerText += " for " + damageDealt + " damage."
     }
 
+    // weapon breaks
+    if (Math.random() <= 0.075 && inventory.length > 2) {
+      text.innerText += 'Your ' + inventory.pop() + ' breaks.'
+      currentWeapon--
+    }
+
     updateMonsterHealth(monsterHealth - damageDealt)
   } else {
     text.innerText += ' and you miss.'
   }
 
-
   monsterAttack()
-
   // check fight result
   if (hp <= 0) {
     lose()
   } else if (monsterHealth <= 0) {
     fighting === 2 ? winGame() : defeatMonster()
-  }
-
-  // weapon breaks
-  if (Math.random() <= 0.08 && inventory.length !== 1) {
-    text.innerText += 'Your ' + inventory.pop() + ' breaks.'
-    currentWeapon--
   }
 }
 
@@ -269,7 +274,7 @@ function getMonsterAttackValue(level) {
 }
 
 function isMonsterHit() {
-  return Math.random() > 0.2 || hp < 20
+  return Math.random() > 0.1 || hp < 20
 }
 
 function dodge() {
@@ -283,11 +288,12 @@ function dodge() {
 
 function defeatMonster() {
   let xpGained = Math.floor(monsters[fighting].level * (Math.random() * 1.5 + 1))
-  let goldGained = Math.floor(monsters[fighting].level * (Math.random() * 4 + 1) + 10)
+  let goldGained = Math.floor(monsters[fighting].level * (Math.random() * 4 + 2) + 10)
   locations[4].text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
   updateGold(gold + goldGained)
   updateXp(xp + xpGained)
   update(locations[4])
+  nextMonster = fighting === nextMonster ? nextMonster++ : nextMonster
 }
 
 
@@ -303,8 +309,9 @@ function winGame() {
 function restart() {
   updateXp(0)
   updateHp(100)
-  updateGold(50)
+  updateGold(0)
   currentWeapon = 0
+  nextMonster = 0
   updatePower(weapons[currentWeapon].power)
   inventory = ['stick']
   goTown()
