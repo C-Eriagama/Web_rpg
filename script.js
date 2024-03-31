@@ -1,6 +1,7 @@
 let xp = 0
 let hp = 100
 let gold = 50
+let power = 5
 let currentWeapon = 0
 let fighting
 let monsterHealth
@@ -13,6 +14,7 @@ const text = document.querySelector('#text')
 const xpText = document.querySelector('#xpText')
 const hpText = document.querySelector('#healthText')
 const goldText = document.querySelector('#goldText')
+const powerText = document.querySelector('#powerText')
 const monsterStats = document.querySelector('#monsterStats')
 const monsterNameText = document.querySelector('#monsterName')
 const monsterHealthText = document.querySelector('#monsterHealth')
@@ -159,10 +161,11 @@ function buyWeapon() {
     if (gold >= 30) {
       updateGold(gold - 30)
       currentWeapon++
+      updatePower(weapons[currentWeapon].power)
       let newWeapon = weapons[currentWeapon].name
       text.innerText = 'You now have a ' + newWeapon + '.'
       inventory.push(newWeapon)
-      text.innerText += ' In your inventory you have: ' + inventory
+      text.innerText += ' In your inventory you have: a ' + inventory.join(', a ')
     } else {
       text.innerText = 'You do not have enough gold to buy a weapon. '
     }
@@ -178,11 +181,13 @@ function sellWeapon() {
     updateGold(gold + 15)
     let currentWeapon = inventory.shift()
     text.innerText = 'You sold a ' + currentWeapon + '.'
-    text.innerText += ' In your inventory you have: ' + inventory
+    text.innerText += ' In your inventory you have: ' + inventory.join(', ')
   } else {
     text.innerText = "Don't sell your only weapon!"
   }
 }
+
+function formatInventory() { }
 
 function fightSlime() {
   fighting = 0
@@ -278,6 +283,7 @@ function restart() {
   updateHp(100)
   updateGold(50)
   currentWeapon = 0
+  updatePower(weapons[currentWeapon].power)
   inventory = ['stick']
   goTown()
 }
@@ -354,6 +360,11 @@ function updateGold(value) {
 function updateXp(value) {
   xp = value
   xpText.innerText = xp
+}
+
+function updatePower(value) {
+  power = value
+  powerText.innerText = power
 }
 
 function updateMonsterHealth(value) {
