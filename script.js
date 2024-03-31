@@ -112,7 +112,7 @@ const locations = [
   }
 ]
 
-// initialize buttons
+// initialize button functions
 button1.onclick = goStore
 button2.onclick = goCave
 button3.onclick = fightDragon
@@ -149,7 +149,7 @@ function goStore() {
 
 function goCave() {
   update(locations[2])
-  if (nextMonster < 1) {
+  if (nextMonster === 0) {
     button2.disabled = true;
   }
 }
@@ -293,7 +293,7 @@ function defeatMonster() {
   updateGold(gold + goldGained)
   updateXp(xp + xpGained)
   update(locations[4])
-  nextMonster = fighting === nextMonster ? nextMonster++ : nextMonster
+  nextMonster = fighting === nextMonster ? nextMonster + 1 : nextMonster
 }
 
 
