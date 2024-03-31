@@ -212,17 +212,26 @@ function goFight() {
   monsterStats.style.display = 'block'
 }
 
-function attack() {
+function monsterAttack() {
   //monster attacks
-  text.innerText = 'The ' + monsters[fighting].name + ' attacks '
+  text.innerText += ' The ' + monsters[fighting].name + ' attacks '
   let damageTaken = getMonsterAttackValue(monsters[fighting].level)
-  updateHp(hp - damageTaken)
-  text.innerText += " you for " + damageTaken + " damage."
+  //Monster misses
+  if (Math.random < 0.05) {
+    damageTaken = 0
+    text.innerText += " but you dodged the attack."
+  } else {
+    updateHp(hp - damageTaken)
+    text.innerText += " you for " + damageTaken + " damage."
+  }
+}
 
+function attack() {
   //attack monster
-  text.innerText += 'You attack it with your ' + weapons[currentWeapon].name + ' '
+  text.innerText = 'You attack it with your ' + weapons[currentWeapon].name + ' '
   if (isMonsterHit()) {
     let damageDealt = weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
+
     //crit chance
     if (Math.random() < 0.1) {
       damageDealt = Math.floor(damageDealt * (Math.random() + 1.25))
@@ -230,10 +239,14 @@ function attack() {
     } else {
       text.innerText += " for " + damageDealt + " damage."
     }
+
     updateMonsterHealth(monsterHealth - damageDealt)
   } else {
     text.innerText += ' and you miss.'
   }
+
+
+  monsterAttack()
 
   // check fight result
   if (hp <= 0) {
@@ -260,8 +273,12 @@ function isMonsterHit() {
 }
 
 function dodge() {
-  text.innerText =
-    'You dodged the attack from the ' + monsters[fighting].name + '.'
+  if (Math.random() > 0.1) {
+    text.innerText = 'You dodged the attack from the ' + monsters[fighting].name + '.'
+  } else {
+    text.innerText = "You failed to dodge the attack. "
+    monsterAttack()
+  }
 }
 
 function defeatMonster() {
