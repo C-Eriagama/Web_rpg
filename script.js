@@ -1,7 +1,3 @@
-let xp = 0
-let hp = 100
-let gold = 50
-let power = 5
 let currentWeapon = 0
 let fighting
 let monsterHealth
@@ -19,6 +15,11 @@ const monsterStats = document.querySelector('#monsterStats')
 const monsterNameText = document.querySelector('#monsterName')
 const monsterHealthText = document.querySelector('#monsterHealth')
 
+updateXp(0)
+updateHp(100)
+updatePower(5)
+updateGold(0)
+
 const weapons = [
   {
     name: 'stick',
@@ -26,23 +27,23 @@ const weapons = [
   },
   {
     name: 'dagger',
-    power: 30
+    power: 15
   },
   {
     name: 'claw hammer',
-    power: 50
+    power: 30
   },
   {
     name: 'sword',
-    power: 100
+    power: 55
   }
 ]
 
 const monsters = [
   {
     name: 'Slime',
-    level: 2,
-    health: 15
+    level: 1,
+    health: 10
   },
   {
     name: 'Fanged Beast',
@@ -218,18 +219,21 @@ function attack() {
   updateHp(hp - damageTaken)
   text.innerText += " you for " + damageTaken + " damage."
 
-
-  text.innerText += 'You attack it with your ' + weapons[currentWeapon].name + ' '
   //attack monster
+  text.innerText += 'You attack it with your ' + weapons[currentWeapon].name + ' '
   if (isMonsterHit()) {
     let damageDealt = weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1
+    //crit chance
+    if (Math.random() < 0.1) {
+      damageDealt = Math.floor(damageDealt * (Math.random() + 1.25))
+      text.innerText += " AND CRIT FOR " + damageDealt + " DAMAGE!"
+    } else {
+      text.innerText += " for " + damageDealt + " damage."
+    }
     updateMonsterHealth(monsterHealth - damageDealt)
-    text.innerText += " for " + damageDealt + " damage."
   } else {
     text.innerText += ' and you miss.'
   }
-
-
 
   // check fight result
   if (hp <= 0) {
@@ -246,8 +250,9 @@ function attack() {
 }
 
 function getMonsterAttackValue(level) {
-  let hit = level * 5 - Math.floor(Math.random() * xp)
-  return hit
+  let hit = level * 4 - Math.floor(Math.random() * xp)
+  hit = Math.floor(hit * (Math.random() + 0.5))
+  return hit <= 0 ? 1 : hit
 }
 
 function isMonsterHit() {
@@ -260,8 +265,8 @@ function dodge() {
 }
 
 function defeatMonster() {
-  let xpGained = monsters[fighting].level
-  let goldGained = Math.floor(monsters[fighting].level * 6.7)
+  let xpGained = Math.floor(monsters[fighting].level * (Math.random() * 1.5 + 1))
+  let goldGained = Math.floor(monsters[fighting].level * (Math.random() * 4 + 1) + 10)
   locations[4].text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
   updateGold(gold + goldGained)
   updateXp(xp + xpGained)
