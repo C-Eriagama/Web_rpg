@@ -30,15 +30,15 @@ const weapons = [
   },
   {
     name: 'dagger',
-    power: 15
+    power: 25
   },
   {
     name: 'claw hammer',
-    power: 30
+    power: 50
   },
   {
     name: 'sword',
-    power: 55
+    power: 100
   }
 ]
 
@@ -77,7 +77,8 @@ const locations = [
     name: locationNames.Town,
     'button text': ['Go to store', 'Go to cave', 'Go to jungle', 'Fight dragon'],
     'button functions': [goStore, goCave, goJungle, fightDragon],
-    text: 'You are in the town square. You see a sign that says "Store."'
+    text: 'Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town.' +
+      ' You are in the town square. Where do you want to go? Use the buttons above.'
   },
   {
     name: locationNames.Store,
@@ -109,8 +110,8 @@ const locations = [
   },
   {
     name: locationNames.Kill,
-    'button text': ['Continue in cave', 'Return to town square', 'Return to town square'],
-    'button functions': [goCave, goTown, goTown],
+    'button text': ['Continue in cave', 'Head to jungle', 'Return to town square'],
+    'button functions': [goCave, goJungle, goTown,],
     text: 'The monster screams "Arg!" As it dies. You gain experience and find gold.'
   },
   {
@@ -139,13 +140,7 @@ button1.onclick = goStore
 button2.onclick = goCave
 button3.onclick = goJungle
 button4.onclick = fightDragon
-updateXp(0)
-updateHp(100)
-updateGold(0)
-currentWeapon = 0
-nextMonster = 0
-updatePower(weapons[currentWeapon].power)
-inventory = ['stick']
+restart()
 
 function update(location) {
   // Chance of easter egg when heading to town
@@ -155,9 +150,22 @@ function update(location) {
       return;
     }
   }
+
+  // going to monsters
+  if (location.name === locationNames.Cave) {
+    let killLocation = getLocation(locationNames.Kill)
+    killLocation["button text"][0] = "Continue in Cave"
+    killLocation["button text"][1] = "Head to Jungle"
+  } else if (location.name === locationNames.Jungle) {
+    let killLocation = getLocation(locationNames.Kill)
+    killLocation["button text"][0] = "Head back to Cave"
+    killLocation["button text"][1] = "Continue in Jungle"
+  }
+
   easterEggButtons.style.display = "none"
   controls.style.display = "block"
   monsterStats.style.display = 'none'
+
   //buttons
   let i
   for (i = 0; i < location['button text'].length; i++) {
@@ -166,10 +174,10 @@ function update(location) {
     buttons[i].disabled = false;
     buttons[i].style.display = ""
   }
-
   if (i === 3) {
     button4.style.display = "none"
   }
+
   text.innerText = location.text
 }
 
@@ -186,6 +194,9 @@ function getLocation(locationName) {
 
 function goTown() {
   update(getLocation(locationNames.Town))
+  if (nextMonster < 2) {
+    button3.disabled = true;
+  }
 }
 
 function goStore() {
@@ -201,6 +212,12 @@ function goCave() {
 
 function goJungle() {
   update(getLocation(locationNames.Jungle))
+  if (nextMonster < 2) {
+    button1.disabled = true;
+  }
+  if (nextMonster < 3) {
+    button2.disabled = true;
+  }
 }
 
 
@@ -353,6 +370,9 @@ function defeatMonster() {
   updateXp(xp + xpGained)
   update(getLocation(locationNames.Kill))
   nextMonster = fighting === nextMonster ? nextMonster + 1 : nextMonster
+  if (nextMonster < 2) {
+    button2.disabled = true;
+  }
 }
 
 
@@ -425,12 +445,14 @@ function pick(guess) {
   easterEggButtons.style.display = "none"
   controls.style.display = "block"
   let location = getLocation(locationNames.Store)
-  button1.innerText = location['button text'][2]
-  button2.innerText = location['button text'][2]
-  button3.innerText = location['button text'][2]
-  button1.onclick = location['button functions'][2]
-  button2.onclick = location['button functions'][2]
-  button3.onclick = location['button functions'][2]
+
+  for (i = 0; i < 3; i++) {
+    buttons[i].innerText = location['button text'][2]
+    buttons[i].onclick = location['button functions'][2]
+    buttons[i].disabled = false;
+    buttons[i].style.display = ""
+  }
+  button4.style.display = "none"
 }
 
 function countNumbers(guess, numbers) {
