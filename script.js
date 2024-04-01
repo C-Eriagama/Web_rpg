@@ -58,15 +58,27 @@ const monsters = [
   }
 ]
 
+const locationNames = {
+  Town: "Town Square",
+  Store: "Store",
+  Cave: "Cave",
+  Jungle: "Jungle",
+  Fight: "Fight",
+  Kill: "Kill Monster",
+  Lose: "Lose",
+  Win: "Win",
+  EasterEgg: "Easter Egg"
+}
+
 const locations = [
   {
-    name: 'Town Square',
+    name: locationNames.Town,
     'button text': ['Go to store', 'Go to cave', 'Fight dragon'],
     'button functions': [goStore, goCave, fightDragon],
     text: 'You are in the town square. You see a sign that says "Store."'
   },
   {
-    name: 'Store',
+    name: locationNames.Store,
     'button text': [
       'Buy 10 health (10 gold)',
       'Buy weapon (30 gold)',
@@ -76,39 +88,39 @@ const locations = [
     text: 'You enter the store.'
   },
   {
-    name: 'Cave',
+    name: locationNames.Cave,
     'button text': ['Fight slime', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSlime, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
-    name: 'Fight',
+    name: locationNames.Fight,
     'button text': ['Attack', 'Dodge', 'Flee'],
     'button functions': [attack, dodge, goTown],
     text: 'You are fighting a monster'
   },
   {
-    name: 'Kill Monster',
+    name: locationNames.Kill,
     'button text': ['Continue in cave', 'Return to town square', 'Return to town square'],
     'button functions': [goCave, goTown, goTown],
     text: 'The monster screams "Arg!" As it dies. You gain experience and find gold.'
   },
   {
-    name: 'Lose',
+    name: locationNames.Lose,
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'You die...'
   },
   {
-    name: 'Win',
+    name: locationNames.Win,
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
-    text: 'You defeat the dragon! YOU WIN THE GAME!'
+    text: 'YOU DEFEAT THE DRAGON! THE TOWN IS SAVED AND YOU WIN THE GAME!'
   },
   {
-    name: 'Easter Egg',
+    name: locationNames.EasterEgg,
     'button text': ['2', '8', 'Go to town square?'],
-    'button functions': [pickTwo, pickEight, goTown],
+    'button functions': [goTown, goTown, goTown],
     text: 'You find a secret game. Pick a number above. Ten numbers will be randomly chosen between 0 and 10.' +
       'If the number you choose matches one of the random numbers, you win!'
   }
@@ -118,11 +130,17 @@ const locations = [
 button1.onclick = goStore
 button2.onclick = goCave
 button3.onclick = fightDragon
-restart()
+updateXp(0)
+updateHp(100)
+updateGold(0)
+currentWeapon = 0
+nextMonster = 0
+updatePower(weapons[currentWeapon].power)
+inventory = ['stick']
 
 function update(location) {
   // Chance of easter egg when heading to town
-  if (location === locations[0]) {
+  if (location.name === locationNames.Town) {
     if (Math.random() < 0.05) {
       easterEgg()
       return;
@@ -144,20 +162,34 @@ function update(location) {
   text.innerText = location.text
 }
 
+function getLocation(locationName) {
+  for (let i = 0; i < locations.length; i++) {
+    if (locations[i].name === locationName) {
+      return locations[i]
+    }
+  }
+}
+
+
+
+
 function goTown() {
-  update(locations[0])
+  update(getLocation(locationNames.Town))
 }
 
 function goStore() {
-  update(locations[1])
+  update(getLocation(locationNames.Store))
 }
 
 function goCave() {
-  update(locations[2])
+  update(getLocation(locationNames.Cave))
   if (nextMonster === 0) {
     button2.disabled = true;
   }
 }
+
+
+
 
 function buyHp() {
   if (gold >= 10) {
@@ -202,6 +234,9 @@ function sellWeapon() {
 
 function formatInventory() { }
 
+
+
+
 function fightSlime() {
   fighting = 0
   goFight()
@@ -218,7 +253,7 @@ function fightDragon() {
 }
 
 function goFight() {
-  update(locations[3])
+  update(getLocation(locationNames.Fight))
   updateMonsterHealth(monsters[fighting].health)
   monsterNameText.innerText = monsters[fighting].name
   monsterStats.style.display = 'block'
@@ -298,21 +333,22 @@ function fightOutcome() {
 function defeatMonster() {
   let xpGained = Math.floor(monsters[fighting].level * (Math.random() * + 1) + 2)
   let goldGained = Math.floor(monsters[fighting].level * (Math.random() * 4 + 2) + 10)
-  locations[4].text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
+  getLocation(locationNames.Kill).text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
   updateGold(gold + goldGained)
   updateXp(xp + xpGained)
-  update(locations[4])
+  update(getLocation(locationNames.Kill))
   nextMonster = fighting === nextMonster ? nextMonster + 1 : nextMonster
 }
 
 
 
+
 function lose() {
-  update(locations[5])
+  update(getLocation(locationNames.Lose))
 }
 
 function winGame() {
-  update(locations[6])
+  update(getLocation(locationNames.Win))
 }
 
 function restart() {
@@ -326,11 +362,14 @@ function restart() {
   goTown()
 }
 
+
+
+
 function easterEgg() {
   easterEggButtons.style.display = "block"
   controls.style.display = "none"
   monsterStats.style.display = 'none'
-  text.innerText = locations[7].text
+  text.innerText = getLocation(locationNames.EasterEgg).text
   let children = easterEggButtons.childNodes
   console.log(children)
   for (let i = 0; i < 10; i++) {
@@ -339,13 +378,6 @@ function easterEgg() {
   children.item(21).onclick = goTown
 }
 
-function pickTwo() {
-  pick(2)
-}
-
-function pickEight() {
-  pick(8)
-}
 
 function pick(guess) {
   // pick random numbers
@@ -377,7 +409,7 @@ function pick(guess) {
   // Change buttons to go to town
   easterEggButtons.style.display = "none"
   controls.style.display = "block"
-  let location = locations[1]
+  let location = getLocation(locationNames.Store)
   button1.innerText = location['button text'][2]
   button2.innerText = location['button text'][2]
   button3.innerText = location['button text'][2]
@@ -395,6 +427,9 @@ function countNumbers(guess, numbers) {
   }
   return count
 }
+
+
+
 
 function updateHp(value) {
   hp = value
