@@ -26,47 +26,61 @@ const easterEggButtons = document.querySelector('#easterEggButtons')
 const weapons = [
   {
     name: 'stick',
-    power: 5
+    power: 5,
+    cost: 0
   },
   {
-    name: 'dagger',
-    power: 25
+    name: 'blunt dagger',
+    power: 12,
+    cost: 20
   },
   {
-    name: 'claw hammer',
-    power: 50
+    name: 'spear',
+    power: 25,
+    cost: 50
   },
   {
-    name: 'sword',
-    power: 100
+    name: 'mace',
+    power: 40,
+    cost: 90
+  },
+  {
+    name: 'heavy sword',
+    power: 60,
+    cost: 140
+  },
+  {
+    name: 'dragons blade',
+    power: 100,
+    cost: 200
   }
 ]
 
 const monsters = [
   {
     name: 'Slime',
-    level: 1,
+    level: 2,
     health: 10
   },
   {
     name: 'Goblin',
     level: 5,
-    health: 20
+    health: 25
   },
   {
     name: 'Spirits',
-    level: 8,
-    health: 60
+    level: 10,
+    health: 55
   },
   {
     name: 'Fanged Beast',
-    level: 10,
-    health: 80
+    level: 15,
+    health: 90
   },
   {
     name: 'Dragon',
-    level: 20,
-    health: 300
+    level: 25,
+    health: 500
   }
 ]
 
@@ -211,6 +225,11 @@ function goTown() {
 
 function goStore() {
   update(getLocation(locationNames.Store))
+  if (currentWeapon < weapons.length - 1) {
+    button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
+  } else {
+    button2.disabled = true
+  }
 }
 
 function goCave() {
@@ -245,34 +264,26 @@ function buyHp() {
 
 function buyWeapon() {
   if (currentWeapon < weapons.length - 1) {
-    if (gold >= 30) {
-      updateGold(gold - 30)
+    let nextWeapon = weapons[currentWeapon + 1]
+    if (gold >= nextWeapon.cost) {
+      updateGold(gold - nextWeapon.cost)
       currentWeapon++
-      updatePower(weapons[currentWeapon].power)
-      let newWeapon = weapons[currentWeapon].name
-      text.innerText = 'You now have a ' + newWeapon + '.'
-      inventory.push(newWeapon)
+      updatePower(nextWeapon.power)
+      text.innerText = 'You now have a ' + nextWeapon.name + '.'
+      inventory.push(nextWeapon.name)
       text.innerText += ' In your inventory you have: a ' + inventory.join(', a ')
+      button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
+
+      if (currentWeapon === weapons.length - 1) { // buy last weapon
+        text.innerText = 'You now have the most powerful weapon!'
+        button2.disabled = true
+      }
     } else {
       text.innerText = 'You do not have enough gold to buy a weapon. '
     }
-  } else {
-    text.innerText = 'You already have the most powerful weapon!'
-    button2.innerText = 'Sell weapon for 15 gold.'
-    button2.onclick = sellWeapon
   }
 }
 
-function sellWeapon() {
-  if (inventory.length > 1) {
-    updateGold(gold + 15)
-    let currentWeapon = inventory.shift()
-    text.innerText = 'You sold a ' + currentWeapon + '.'
-    text.innerText += ' In your inventory you have: ' + inventory.join(', ')
-  } else {
-    text.innerText = "Don't sell your only weapon!"
-  }
-}
 
 
 
@@ -331,11 +342,11 @@ function attack() {
   //attack monster
   text.innerText = 'You attack it with your ' + weapons[currentWeapon].name + ' '
   if (isMonsterHit()) {
-    let damageDealt = Math.floor(weapons[currentWeapon].power * (Math.random() * 0.2 + 0.9))
+    let damageDealt = Math.floor(weapons[currentWeapon].power * (Math.random() * 0.4 + 0.8)) //base damage variance 0.8x to 1.2x
 
     //crit chance
     if (Math.random() < 0.1) {
-      damageDealt = Math.floor(damageDealt * (Math.random() + 1.25))
+      damageDealt = Math.floor(damageDealt * (Math.random() * 0.5 + 1.5)) //1.5x to 2x
       text.innerText += " AND CRIT FOR " + damageDealt + " DAMAGE!"
     } else {
       text.innerText += " for " + damageDealt + " damage."
@@ -357,8 +368,9 @@ function attack() {
 }
 
 function getMonsterAttackValue(level) {
-  let hit = level * 5 - Math.floor(Math.random() * xp / 5) //adjust damage based on xp
-  hit = Math.floor(hit * (Math.random() + 0.6)) // random variance in damage 0.6x go 1.6x
+  let hit = Math.floor(1.94 * level + 2) //base damage
+  hit -= Math.floor(Math.random() * xp / 7) //adjust damage based on xp up to -xp/7
+  hit = Math.floor(hit * (Math.random() * 0.6 + 0.7)) // random variance in damage 0.7x to 1.3x
   return hit <= 0 ? 1 : hit
 }
 
@@ -369,6 +381,9 @@ function isMonsterHit() {
 function dodge() {
   if (Math.random() > 0.1) {
     text.innerText = 'You dodged the attack from the ' + monsters[fighting].name + '.'
+    if (Math.random() < 0.95) {
+      updateHp(hp + 5) // 95% chance to gain 5 hp on a dodge
+    }
   } else {
     text.innerText = "You failed to dodge the attack. "
     monsterAttack()
@@ -385,8 +400,14 @@ function fightOutcome() {
 }
 
 function defeatMonster() {
-  let xpGained = Math.floor(monsters[fighting].level * (Math.random() * + 1) + 2)
-  let goldGained = Math.floor(monsters[fighting].level * (Math.random() * 4 + 2) + 10)
+  let monsterLevel = monsters[fighting].level
+  let xpGained = Math.floor(monsterLevel * 1.5 - 2) // base xp 
+  xpGained = Math.floor(xpGained * (Math.random() * 0.3 + 0.85)) // variance 0.85x to 1.15x
+  xpGained = xpGained > 0 ? xpGained : 1
+  let goldGained = Math.floor(0.5 * Math.pow(monsterLevel, 2) - 0 / 38 * monsterLevel + 11.07) // base gold 
+  goldGained = Math.floor(goldGained * (Math.random() * 0.4 + 0.8)) // variance 0.8x to 1.2x
+
+
   getLocation(locationNames.Kill).text = "The monster screams \"Arg!\" As it dies. You gain " + xpGained + " XP and find " + goldGained + " gold."
   updateGold(gold + goldGained)
   updateXp(xp + xpGained)
