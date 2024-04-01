@@ -49,9 +49,19 @@ const monsters = [
     health: 10
   },
   {
-    name: 'Fanged Beast',
+    name: 'Goblin',
+    level: 5,
+    health: 20
+  },
+  {
+    name: 'Spirits',
     level: 8,
     health: 60
+  },
+  {
+    name: 'Fanged Beast',
+    level: 10,
+    health: 80
   },
   {
     name: 'Dragon',
@@ -92,14 +102,14 @@ const locations = [
   },
   {
     name: locationNames.Cave,
-    'button text': ['Fight slime', 'Fight fanged beast', 'Go to town square'],
-    'button functions': [fightSlime, fightFangedBeast, goTown],
+    'button text': ['Fight slime', 'Fight goblin', 'Go to town square'],
+    'button functions': [fightSlime, fightGoblin, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
     name: locationNames.Jungle,
-    'button text': ['Fight slime', 'Fight fanged beast', 'Go to town square'],
-    'button functions': [fightSlime, fightFangedBeast, goTown],
+    'button text': ['Fight spirit', 'Fight fanged beast', 'Go to town square'],
+    'button functions': [fightSpirit, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
@@ -264,7 +274,6 @@ function sellWeapon() {
   }
 }
 
-function formatInventory() { }
 
 
 
@@ -274,15 +283,28 @@ function fightSlime() {
   goFight()
 }
 
-function fightFangedBeast() {
+function fightGoblin() {
   fighting = 1
   goFight()
 }
 
-function fightDragon() {
+function fightSpirit() {
   fighting = 2
   goFight()
 }
+
+function fightFangedBeast() {
+  fighting = 3
+  goFight()
+}
+
+function fightDragon() {
+  fighting = 4
+  goFight()
+}
+
+
+
 
 function goFight() {
   update(getLocation(locationNames.Fight))
@@ -358,7 +380,7 @@ function fightOutcome() {
   if (hp <= 0) {
     lose()
   } else if (monsterHealth <= 0) {
-    fighting === 2 ? winGame() : defeatMonster()
+    fighting === monsters.length - 1 ? winGame() : defeatMonster()
   }
 }
 
@@ -371,7 +393,7 @@ function defeatMonster() {
   update(getLocation(locationNames.Kill))
   nextMonster = fighting === nextMonster ? nextMonster + 1 : nextMonster
   if (nextMonster < 2) {
-    button2.disabled = true;
+    button2.disabled = true; // Can't go to jungle until cave is cleared out
   }
 }
 
