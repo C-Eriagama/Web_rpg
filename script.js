@@ -11,6 +11,8 @@ const controls = document.querySelector('#controls')
 const button1 = document.querySelector('#button1')
 const button2 = document.querySelector('#button2')
 const button3 = document.querySelector('#button3')
+const button4 = document.querySelector('#button4')
+const buttons = [button1, button2, button3, button4]
 const text = document.querySelector('#text')
 const xpText = document.querySelector('#xpText')
 const hpText = document.querySelector('#healthText')
@@ -73,8 +75,8 @@ const locationNames = {
 const locations = [
   {
     name: locationNames.Town,
-    'button text': ['Go to store', 'Go to cave', 'Fight dragon'],
-    'button functions': [goStore, goCave, fightDragon],
+    'button text': ['Go to store', 'Go to cave', 'Go to jungle', 'Fight dragon'],
+    'button functions': [goStore, goCave, goJungle, fightDragon],
     text: 'You are in the town square. You see a sign that says "Store."'
   },
   {
@@ -89,6 +91,12 @@ const locations = [
   },
   {
     name: locationNames.Cave,
+    'button text': ['Fight slime', 'Fight fanged beast', 'Go to town square'],
+    'button functions': [fightSlime, fightFangedBeast, goTown],
+    text: 'You enter the cave. You see some monsters.'
+  },
+  {
+    name: locationNames.Jungle,
     'button text': ['Fight slime', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSlime, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
@@ -129,7 +137,8 @@ const locations = [
 // initialize button functions
 button1.onclick = goStore
 button2.onclick = goCave
-button3.onclick = fightDragon
+button3.onclick = goJungle
+button4.onclick = fightDragon
 updateXp(0)
 updateHp(100)
 updateGold(0)
@@ -149,16 +158,18 @@ function update(location) {
   easterEggButtons.style.display = "none"
   controls.style.display = "block"
   monsterStats.style.display = 'none'
-  button1.innerText = location['button text'][0]
-  button2.innerText = location['button text'][1]
-  button3.innerText = location['button text'][2]
-  button1.onclick = location['button functions'][0]
-  button2.onclick = location['button functions'][1]
-  button3.onclick = location['button functions'][2]
-  button1.disabled = false;
-  button2.disabled = false;
-  button3.disabled = false;
+  //buttons
+  let i
+  for (i = 0; i < location['button text'].length; i++) {
+    buttons[i].innerText = location['button text'][i]
+    buttons[i].onclick = location['button functions'][i]
+    buttons[i].disabled = false;
+    buttons[i].style.display = ""
+  }
 
+  if (i === 3) {
+    button4.style.display = "none"
+  }
   text.innerText = location.text
 }
 
@@ -186,6 +197,10 @@ function goCave() {
   if (nextMonster === 0) {
     button2.disabled = true;
   }
+}
+
+function goJungle() {
+  update(getLocation(locationNames.Jungle))
 }
 
 
