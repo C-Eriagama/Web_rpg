@@ -263,7 +263,7 @@ function buyHp() {
 }
 
 function buyWeapon() {
-  if (currentWeapon < weapons.length - 1) {
+  if (currentWeapon < weapons.length - 1) { // current weapon is before last
     let nextWeapon = weapons[currentWeapon + 1]
     if (gold >= nextWeapon.cost) {
       updateGold(gold - nextWeapon.cost)
@@ -272,12 +272,14 @@ function buyWeapon() {
       text.innerText = 'You now have a ' + nextWeapon.name + '.'
       inventory.push(nextWeapon.name)
       text.innerText += ' In your inventory you have: a ' + inventory.join(', a ')
-      button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
 
       if (currentWeapon === weapons.length - 1) { // buy last weapon
         text.innerText = 'You now have the most powerful weapon!'
         button2.disabled = true
+      } else {
+        button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
       }
+
     } else {
       text.innerText = 'You do not have enough gold to buy a weapon. '
     }
