@@ -6,15 +6,23 @@ body {
   background-color: black;
   color: white;
   padding: 10px;
+  height: 55px;
 }
 
 #game {
-  max-width: 500px;
-  max-height: 400px;
+  max-width: 480px;
+  max-height: 480px;
   background-color: lightgray;
   color: white;
   margin: 0 auto;
   padding: 10px;
+}
+
+#scene {
+  height: 320px; 
+  width: 480px;
+  background-image: url(images/town1.jpeg);
+  background-size: cover;
 }
 
 #controls {
@@ -29,6 +37,8 @@ body {
 }
 
 #monsterStats {
+  position: absolute;
+  width: 468px;
   display: none;
   border: 1px black solid;
   color: white;

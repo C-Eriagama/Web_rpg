@@ -22,6 +22,7 @@ const monsterStats = document.querySelector('#monsterStats')
 const monsterNameText = document.querySelector('#monsterName')
 const monsterHealthText = document.querySelector('#monsterHealth')
 const easterEggButtons = document.querySelector('#easterEggButtons')
+const scene = document.querySelector('#scene')
 
 const weapons = [
   {
@@ -99,6 +100,7 @@ const locationNames = {
 const locations = [
   {
     name: locationNames.Town,
+    image: "images/town1.jpeg",
     'button text': ['Go to store', 'Go to cave', 'Go to jungle', 'Fight dragon'],
     'button functions': [goStore, goCave, goJungle, fightDragon],
     text: 'Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town.' +
@@ -116,12 +118,14 @@ const locations = [
   },
   {
     name: locationNames.Cave,
+    image: "images/cave1.jpeg",
     'button text': ['Fight slime', 'Fight goblin', 'Go to town square'],
     'button functions': [fightSlime, fightGoblin, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
     name: locationNames.Jungle,
+    image: "images/jungle1.jpeg",
     'button text': ['Fight spirit', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSpirit, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
@@ -175,12 +179,19 @@ function update(location) {
     }
   }
 
+  //image changing
+  if (location.name === locationNames.Town) {
+    scene.style.backgroundImage = "url(" + location.image + ")";
+  }
+
   // going to monsters
   if (location.name === locationNames.Cave) {
+    scene.style.backgroundImage = "url(" + location.image + ")";
     let killLocation = getLocation(locationNames.Kill)
     killLocation["button text"][0] = "Continue in Cave"
     killLocation["button text"][1] = "Head to Jungle"
   } else if (location.name === locationNames.Jungle) {
+    scene.style.backgroundImage = "url(" + location.image + ")";
     let killLocation = getLocation(locationNames.Kill)
     killLocation["button text"][0] = "Head back to Cave"
     killLocation["button text"][1] = "Continue in Jungle"
@@ -468,18 +479,17 @@ function pick(guess) {
 
   // write down numbers
   text.innerText = "You picked " + guess + ". Here are the random numbers: \n"
-  for (let i = 0; i < numbers.length; i++) {
-    text.innerText += numbers[i] + "\n"
-  }
+  text.innerText += numbers.join(`, `);
+
 
   // count the guesses and provide a reward
   let count = countNumbers(guess, numbers)
   if (count > 0) {
     let value = Math.floor(Math.random() * 20) * count + 10
-    text.innerText += "Correct! You win " + value + " gold!"
+    text.innerText += "\nCorrect! You win " + value + " gold!"
     updateGold(gold + value)
   } else {
-    text.innerText += "Wrong! You lose 10 health!"
+    text.innerText += "\nWrong! You lose 10 health!"
     updateHp(hp - 10)
     if (hp <= 0) {
       lose()
