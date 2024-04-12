@@ -100,7 +100,7 @@ const locationNames = {
 const locations = [
   {
     name: locationNames.Town,
-    image: "images/town1.jpeg",
+    image: "images/town3.jpeg",
     'button text': ['Go to store', 'Go to cave', 'Go to jungle', 'Fight dragon'],
     'button functions': [goStore, goCave, goJungle, fightDragon],
     text: 'Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town.' +
@@ -108,6 +108,7 @@ const locations = [
   },
   {
     name: locationNames.Store,
+    image: "images/store1.jpeg",
     'button text': [
       'Buy 10 health (10 gold)',
       'Buy weapon (30 gold)',
@@ -118,14 +119,14 @@ const locations = [
   },
   {
     name: locationNames.Cave,
-    image: "images/cave1.jpeg",
+    image: "images/cave2.jpeg",
     'button text': ['Fight slime', 'Fight goblin', 'Go to town square'],
     'button functions': [fightSlime, fightGoblin, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
     name: locationNames.Jungle,
-    image: "images/jungle1.jpeg",
+    image: "images/jungle4.jpeg",
     'button text': ['Fight spirit', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSpirit, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
@@ -156,6 +157,7 @@ const locations = [
   },
   {
     name: locationNames.EasterEgg,
+    image: "images/easter1.jpeg",
     'button text': ['2', '8', 'Go to town square?'],
     'button functions': [goTown, goTown, goTown],
     text: 'You find a secret game. Pick a number above. Ten numbers will be randomly chosen between 0 and 10.' +
@@ -180,7 +182,7 @@ function update(location) {
   }
 
   //image changing
-  if (location.name === locationNames.Town) {
+  if ("image" in location) {
     scene.style.backgroundImage = "url(" + location.image + ")";
   }
 
@@ -324,6 +326,7 @@ function fightFangedBeast() {
 
 function fightDragon() {
   fighting = 4
+  scene.style.backgroundImage = "url(images/DragonArea1.jpeg)"
   goFight()
 }
 
@@ -460,9 +463,10 @@ function easterEgg() {
   easterEggButtons.style.display = "block"
   controls.style.display = "none"
   monsterStats.style.display = 'none'
+  scene.style.backgroundImage = "url(" + getLocation(locationNames.EasterEgg).image + ")";
   text.innerText = getLocation(locationNames.EasterEgg).text
   let children = easterEggButtons.childNodes
-  console.log(children)
+  //console.log(children)
   for (let i = 0; i < 10; i++) {
     children.item(2 * i + 1).onclick = function () { pick(i) }
   }
