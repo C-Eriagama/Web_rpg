@@ -103,3 +103,22 @@ body {
   visibility: hidden;
 }
 
+#credits{
+  text-align: center;
+  color:grey;
+}
+
+#credits :nth-child(2){
+  font-size:10px;
+}
+
+#credits a{
+  color:grey;
+  text-decoration: none;
+}
+
+#credits a:hover{
+  color:rgb(189, 189, 189);
+}
+
+
