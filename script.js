@@ -256,6 +256,9 @@ function goStore() {
   } else {
     button2.disabled = true
   }
+
+  updateShopButtons();
+
   var styleButton = document.querySelectorAll("#controls button");
   styleButton.forEach(function (button) {
     button.style.width = "35%";
@@ -284,36 +287,40 @@ function goJungle() {
 
 
 function buyHp() {
-  if (gold >= 10) {
-    updateGold(gold - 10)
-    updateHp(hp + 10)
-    text.innerText = 'You have bought extra 10 health.'
-  } else {
-    text.innerText = 'You do not have enough gold to buy health.'
-  }
+  updateGold(gold - 10)
+  updateHp(hp + 10)
+  text.innerText = 'You have bought extra 10 health.'
+  updateShopButtons();
 }
 
 function buyWeapon() {
-  if (currentWeapon < weapons.length - 1) { // current weapon is before last
-    let nextWeapon = weapons[currentWeapon + 1]
-    if (gold >= nextWeapon.cost) {
-      updateGold(gold - nextWeapon.cost)
-      currentWeapon++
-      updatePower(nextWeapon.power)
-      text.innerText = 'You now have a ' + nextWeapon.name + '.'
-      inventory.push(nextWeapon.name)
-      text.innerText += ' In your inventory you have: a ' + inventory.join(', a ')
+  let nextWeapon = weapons[currentWeapon + 1]
 
-      if (currentWeapon === weapons.length - 1) { // buy last weapon
-        text.innerText = 'You now have the most powerful weapon!'
-        button2.disabled = true
-      } else {
-        button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
-      }
+  updateGold(gold - nextWeapon.cost)
+  currentWeapon++
+  updatePower(nextWeapon.power)
+  text.innerText = 'You now have a ' + nextWeapon.name + '.'
+  inventory.push(nextWeapon.name)
+  text.innerText += ' In your inventory you have: a ' + inventory.join(', a ')
 
-    } else {
-      text.innerText = 'You do not have enough gold to buy a weapon. '
-    }
+  if (currentWeapon === weapons.length - 1) { // buy last weapon
+    text.innerText = 'You now have the most powerful weapon!'
+    button2.disabled = true
+  } else {
+    button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
+  }
+
+  updateShopButtons();
+
+
+}
+
+function updateShopButtons() {
+  if (gold < 10) {
+    button1.disabled = true;
+  }
+  if (gold < weapons[currentWeapon + 1].cost || currentWeapon === weapons.length - 1) {
+    button2.disabled = true;
   }
 }
 
