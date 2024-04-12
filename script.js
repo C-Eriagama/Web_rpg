@@ -146,6 +146,7 @@ const locations = [
   },
   {
     name: locationNames.Lose,
+    image: "images/lose1.jpeg",
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'You die...'
@@ -158,7 +159,7 @@ const locations = [
   },
   {
     name: locationNames.EasterEgg,
-    image: "images/easter1.jpeg",
+    image: "images/easter2.jpeg",
     'button text': ['2', '8', 'Go to town square?'],
     'button functions': [goTown, goTown, goTown],
     text: 'You find a secret game. Pick a number above. Ten numbers will be randomly chosen between 0 and 10.' +
@@ -466,8 +467,6 @@ function defeatMonster() {
 
 function lose() {
   update(getLocation(locationNames.Lose))
-  scene.style.backgroundImage = "none"
-  scene.style.backgroundColor = "black"
 }
 
 function winGame() {
