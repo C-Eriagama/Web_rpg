@@ -357,6 +357,7 @@ function goFight() {
   updateMonsterHealth(monsters[fighting].health)
   monsterNameText.innerText = monsters[fighting].name
   monsterStats.style.display = 'block'
+  text.innerText = 'You are fighting a ' + monsters[fighting].name + '.'
 }
 
 function monsterAttack() {
@@ -458,6 +459,8 @@ function defeatMonster() {
 
 function lose() {
   update(getLocation(locationNames.Lose))
+  scene.style.backgroundImage = "none"
+  scene.style.backgroundColor = "black"
 }
 
 function winGame() {

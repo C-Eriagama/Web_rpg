@@ -41,6 +41,10 @@ body {
   background-color:rgb(194, 149, 65);
 }
 
+#controls button:hover:enabled{
+  background-color: rgb(219, 168, 74);
+}
+
 #stats {
   border: 1px black solid;
   border-radius: 5px 5px 0 0;
@@ -87,6 +91,10 @@ body {
   width: 30px;
 }
 
+#easterEggButtons button:hover:enabled{
+  background-color: rgb(219, 168, 74);
+}
+
 #player{
   position: absolute;
   top: 225px;
@@ -94,3 +102,4 @@ body {
   height: 150px;
   visibility: hidden;
 }
+
