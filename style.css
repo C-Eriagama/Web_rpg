@@ -50,8 +50,21 @@ body {
   padding-right: 10px;
 }
 
+.statIcon {
+  width: 15px;
+  height: 15px;
+}
+
 #easterEggButtons{
   display: none;
   border: 1px black solid;
   padding: 5px;
+}
+
+#player{
+  position: absolute;
+  top: 225px;
+  width: 150px;
+  height: 150px;
+  visibility: hidden;
 }

@@ -23,6 +23,7 @@ const monsterNameText = document.querySelector('#monsterName')
 const monsterHealthText = document.querySelector('#monsterHealth')
 const easterEggButtons = document.querySelector('#easterEggButtons')
 const scene = document.querySelector('#scene')
+const player = document.querySelector('#player')
 
 const weapons = [
   {
@@ -202,6 +203,8 @@ function update(location) {
   easterEggButtons.style.display = "none"
   controls.style.display = "block"
   monsterStats.style.display = 'none'
+  player.style.visibility = 'hidden'
+
 
   //buttons
   let i
@@ -335,6 +338,7 @@ function fightDragon() {
 
 function goFight() {
   update(getLocation(locationNames.Fight))
+  player.style.visibility = 'visible'
   updateMonsterHealth(monsters[fighting].health)
   monsterNameText.innerText = monsters[fighting].name
   monsterStats.style.display = 'block'
