@@ -1,18 +1,21 @@
 body {
-  background-color: darkblue;
+  background-color: rgb(17, 17, 17);
 }
 
 #text {
   background-color: black;
+  border-radius: 0 0 5px 5px;
   color: white;
   padding: 10px;
-  height: 55px;
+  height: 60px;
+  font-size: 17px;
 }
 
 #game {
   max-width: 480px;
   max-height: 480px;
-  background-color: lightgray;
+  border-radius: 10px;
+  background-color: rgb(175, 150, 68);
   color: white;
   margin: 0 auto;
   padding: 10px;
@@ -28,12 +31,25 @@ body {
 #controls {
   border: 1px black solid;
   padding: 5px;
+  background-color:rgb(129, 87, 8);
+}
+
+#controls button{
+  width: 24.3%;
+  height: 30px;
+  border-radius: 5px;
+  background-color:rgb(194, 149, 65);
 }
 
 #stats {
   border: 1px black solid;
-  color: black;
+  border-radius: 5px 5px 0 0;
+  background-color: rgb(172, 123, 32);
+  color: rgb(0, 0, 0);
   padding: 5px;
+  font-size: 17px;
+  display:flex;
+  justify-content: space-between;
 }
 
 #monsterStats {
@@ -41,9 +57,11 @@ body {
   width: 468px;
   display: none;
   border: 1px black solid;
+  border-top: 0px;
   color: white;
   padding: 5px;
   background-color: red;
+  font-size: 17px;
 }
 
 .stat {
@@ -59,6 +77,14 @@ body {
   display: none;
   border: 1px black solid;
   padding: 5px;
+  background-color: rgb(129, 87, 8);
+}
+
+#easterEggButtons button{
+  background-color: rgb(194, 149, 65);
+  border-radius: 5px;
+  height: 30px;
+  width: 30px;
 }
 
 #player{

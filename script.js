@@ -174,18 +174,28 @@ button4.onclick = fightDragon
 restart()
 
 function update(location) {
-  // Chance of easter egg when heading to town
   if (location.name === locationNames.Town) {
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.05) {  // Chance of easter egg when heading to town
       easterEgg()
       return;
     }
+    //button width for town
+    let styleButton = document.querySelectorAll("#controls button");
+    styleButton.forEach(function (button) {
+      button.style.width = "24.3%";
+    });
+  } else { //button width for other locations
+    let styleButton = document.querySelectorAll("#controls button");
+    styleButton.forEach(function (button) {
+      button.style.width = "32.75%";
+    });
   }
 
   //image changing
   if ("image" in location) {
     scene.style.backgroundImage = "url(" + location.image + ")";
   }
+
 
   // going to monsters
   if (location.name === locationNames.Cave) {
@@ -246,6 +256,11 @@ function goStore() {
   } else {
     button2.disabled = true
   }
+  var styleButton = document.querySelectorAll("#controls button");
+  styleButton.forEach(function (button) {
+    button.style.width = "35%";
+  });
+  styleButton[2].style.width = "28%";
 }
 
 function goCave() {
@@ -467,6 +482,7 @@ function easterEgg() {
   easterEggButtons.style.display = "block"
   controls.style.display = "none"
   monsterStats.style.display = 'none'
+  player.style.visibility = 'hidden'
   scene.style.backgroundImage = "url(" + getLocation(locationNames.EasterEgg).image + ")";
   text.innerText = getLocation(locationNames.EasterEgg).text
   let children = easterEggButtons.childNodes
@@ -475,6 +491,7 @@ function easterEgg() {
     children.item(2 * i + 1).onclick = function () { pick(i) }
   }
   children.item(21).onclick = goTown
+  children.item(21).style.width = "27.3%"
 }
 
 
