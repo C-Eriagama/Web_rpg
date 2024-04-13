@@ -24,6 +24,7 @@ const monsterHealthText = document.querySelector('#monsterHealth')
 const easterEggButtons = document.querySelector('#easterEggButtons')
 const scene = document.querySelector('#scene')
 const player = document.querySelector('#player')
+const monsterImage = document.querySelector('#monster')
 
 const weapons = [
   {
@@ -61,26 +62,31 @@ const weapons = [
 const monsters = [
   {
     name: 'Slime',
+    image: 'images/slime.png',
     level: 2,
     health: 10
   },
   {
     name: 'Goblin',
+    image: 'images/goblin.png',
     level: 5,
     health: 25
   },
   {
     name: 'Spirits',
+    image: 'images/spirit.png',
     level: 10,
     health: 55
   },
   {
     name: 'Fanged Beast',
+    image: 'images/beast.png',
     level: 15,
     health: 90
   },
   {
     name: 'Dragon',
+    image: 'images/dragon.png',
     level: 25,
     health: 500
   }
@@ -101,7 +107,7 @@ const locationNames = {
 const locations = [
   {
     name: locationNames.Town,
-    image: "images/town3.jpeg",
+    image: "images/town.jpeg",
     'button text': ['Go to store', 'Go to cave', 'Go to jungle', 'Fight dragon'],
     'button functions': [goStore, goCave, goJungle, fightDragon],
     text: 'Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town.' +
@@ -109,7 +115,7 @@ const locations = [
   },
   {
     name: locationNames.Store,
-    image: "images/store1.jpeg",
+    image: "images/store.jpeg",
     'button text': [
       'Buy 10 health (10 gold)',
       'Buy weapon (30 gold)',
@@ -120,14 +126,14 @@ const locations = [
   },
   {
     name: locationNames.Cave,
-    image: "images/cave2.jpeg",
+    image: "images/cave.jpeg",
     'button text': ['Fight slime', 'Fight goblin', 'Go to town square'],
     'button functions': [fightSlime, fightGoblin, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
     name: locationNames.Jungle,
-    image: "images/jungle4.jpeg",
+    image: "images/jungle.jpeg",
     'button text': ['Fight spirit', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSpirit, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
@@ -146,7 +152,7 @@ const locations = [
   },
   {
     name: locationNames.Lose,
-    image: "images/lose1.jpeg",
+    image: "images/lose.jpeg",
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'You die...'
@@ -159,7 +165,7 @@ const locations = [
   },
   {
     name: locationNames.EasterEgg,
-    image: "images/easter2.jpeg",
+    image: "images/easter.jpeg",
     'button text': ['2', '8', 'Go to town square?'],
     'button functions': [goTown, goTown, goTown],
     text: 'You find a secret game. Pick a number above. Ten numbers will be randomly chosen between 0 and 10.' +
@@ -215,6 +221,7 @@ function update(location) {
   controls.style.display = "block"
   monsterStats.style.display = 'none'
   player.style.visibility = 'hidden'
+  monsterImage.style.visibility = 'hidden'
 
 
   //buttons
@@ -352,7 +359,7 @@ function fightFangedBeast() {
 
 function fightDragon() {
   fighting = 4
-  scene.style.backgroundImage = "url(images/DragonArea1.jpeg)"
+  scene.style.backgroundImage = "url(images/dragonArea.jpeg)"
   goFight()
 }
 
@@ -362,6 +369,8 @@ function fightDragon() {
 function goFight() {
   update(getLocation(locationNames.Fight))
   player.style.visibility = 'visible'
+  monsterImage.src = monsters[fighting].image
+  monsterImage.style.visibility = 'visible'
   updateMonsterHealth(monsters[fighting].health)
   monsterNameText.innerText = monsters[fighting].name
   monsterStats.style.display = 'block'
@@ -492,6 +501,7 @@ function easterEgg() {
   controls.style.display = "none"
   monsterStats.style.display = 'none'
   player.style.visibility = 'hidden'
+  monsterImage.style.visibility = 'hidden'
   scene.style.backgroundImage = "url(" + getLocation(locationNames.EasterEgg).image + ")";
   text.innerText = getLocation(locationNames.EasterEgg).text
   let children = easterEggButtons.childNodes
