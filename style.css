@@ -40,6 +40,7 @@ body {
   height: 30px;
   border-radius: 5px;
   background-color:rgb(194, 149, 65);
+  color: black;
 }
 
 #controls button:hover:enabled{
@@ -89,6 +90,7 @@ body {
 
 #easterEggButtons button{
   background-color: rgb(194, 149, 65);
+  color:black;
   border-radius: 5px;
   height: 30px;
   width: 30px;
