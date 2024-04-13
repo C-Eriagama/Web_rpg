@@ -25,6 +25,8 @@ const easterEggButtons = document.querySelector('#easterEggButtons')
 const scene = document.querySelector('#scene')
 const player = document.querySelector('#player')
 const monsterImage = document.querySelector('#monster')
+const playerDamage = document.querySelector('#playerDamage')
+const monsterDamage = document.querySelector('#monsterDamage')
 
 const weapons = [
   {
@@ -397,8 +399,11 @@ function monsterAttack() {
   let endLeft = 270 - monsterImage.width
   document.documentElement.style.setProperty('--my-end-left', endLeft.toString() + 'px')
   monsterImage.classList.add('monsterAttack')
+  monsterDamage.innerText = ' ' + damageTaken
+  monsterDamage.classList.add('damageAnimation')
   setTimeout(() => {
     monsterImage.classList.remove('monsterAttack')
+    monsterDamage.classList.remove('damageAnimation')
     for (let i = 0; i < 3; i++) {
       buttons[i].disabled = false;
     }
@@ -425,17 +430,21 @@ function attack() {
       currentWeapon--
     }
 
+    playerDamage.innerText = ' ' + damageDealt
     updateMonsterHealth(monsterHealth - damageDealt)
   } else {
     text.innerText += ' and you miss.'
+    playerDamage.innerText = 'miss'
   }
 
   player.classList.add('playerAttack')
+  playerDamage.classList.add('damageAnimation')
   monsterAttack()
 
   //remove animation class after 1 second
   setTimeout(() => {
     player.classList.remove('playerAttack')
+    playerDamage.classList.remove('damageAnimation')
     fightOutcome()
   }, 1000)
 
@@ -493,6 +502,7 @@ function defeatMonster() {
   if (nextMonster < 2) {
     button2.disabled = true; // Can't go to jungle until cave is cleared out
   }
+  player.style.visibility = 'visible'
 }
 
 

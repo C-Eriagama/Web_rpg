@@ -174,3 +174,44 @@ body {
   }
 }
 
+.damage{
+  z-index: 2;
+  position: absolute;
+  font-size: 24px;
+  opacity: 0;
+}
+
+#monsterDamage {
+  bottom: 60px;
+  left: 65px;
+  z-index: 2;
+  color: red;
+}
+
+#playerDamage {
+  bottom: 60px;
+  right: 50px;
+  z-index: 2;
+}
+
+.damageAnimation {
+  animation-name: fade;
+  animation-duration: 1s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+   50% {
+    opacity: 0.75;
+  }
+ 
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
