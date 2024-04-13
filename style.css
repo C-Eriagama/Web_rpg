@@ -24,7 +24,7 @@ body {
 #scene {
   height: 320px; 
   width: 480px;
-  background-image: url(images/town.jpeg);
+  background-image: url(images/town.webp);
   background-size: cover;
   position: relative;
 }

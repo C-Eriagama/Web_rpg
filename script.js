@@ -65,31 +65,31 @@ const weapons = [
 const monsters = [
   {
     name: 'Slime',
-    image: 'images/slime.png',
+    image: 'images/slime.webp',
     level: 2,
     health: 10
   },
   {
     name: 'Goblin',
-    image: 'images/goblin.png',
+    image: 'images/goblin.webp',
     level: 5,
     health: 25
   },
   {
     name: 'Spirits',
-    image: 'images/spirit.png',
+    image: 'images/spirit.webp',
     level: 10,
     health: 55
   },
   {
     name: 'Fanged Beast',
-    image: 'images/beast.png',
+    image: 'images/beast.webp',
     level: 15,
     health: 90
   },
   {
     name: 'Dragon',
-    image: 'images/dragon.png',
+    image: 'images/dragon.webp',
     level: 25,
     health: 500
   }
@@ -110,7 +110,7 @@ const locationNames = {
 const locations = [
   {
     name: locationNames.Town,
-    image: "images/town.jpeg",
+    image: "images/town.webp",
     'button text': ['Go to store', 'Go to cave', 'Go to jungle', 'Fight dragon'],
     'button functions': [goStore, goCave, goJungle, fightDragon],
     text: 'Welcome to Dragon Repeller. You must defeat the dragon that is preventing people from leaving the town.' +
@@ -118,7 +118,7 @@ const locations = [
   },
   {
     name: locationNames.Store,
-    image: "images/store.jpeg",
+    image: "images/store.webp",
     'button text': [
       'Buy 10 health (10 gold)',
       'Buy weapon (30 gold)',
@@ -129,14 +129,14 @@ const locations = [
   },
   {
     name: locationNames.Cave,
-    image: "images/cave.jpeg",
+    image: "images/cave.webp",
     'button text': ['Fight slime', 'Fight goblin', 'Go to town square'],
     'button functions': [fightSlime, fightGoblin, goTown],
     text: 'You enter the cave. You see some monsters.'
   },
   {
     name: locationNames.Jungle,
-    image: "images/jungle.jpeg",
+    image: "images/jungle.webp",
     'button text': ['Fight spirit', 'Fight fanged beast', 'Go to town square'],
     'button functions': [fightSpirit, fightFangedBeast, goTown],
     text: 'You enter the cave. You see some monsters.'
@@ -155,21 +155,21 @@ const locations = [
   },
   {
     name: locationNames.Lose,
-    image: "images/lose.jpeg",
+    image: "images/lose.webp",
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'You die...'
   },
   {
     name: locationNames.Win,
-    image: "images/win.jpeg",
+    image: "images/win.webp",
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'YOU DEFEAT THE DRAGON! THE TOWN IS SAVED AND YOU WIN THE GAME!'
   },
   {
     name: locationNames.EasterEgg,
-    image: "images/easter.jpeg",
+    image: "images/easter.webp",
     'button text': ['2', '8', 'Go to town square?'],
     'button functions': [goTown, goTown, goTown],
     text: 'You find a secret game. Pick a number above. Ten numbers will be randomly chosen between 0 and 10.' +
@@ -379,7 +379,7 @@ function fightFangedBeast() {
 
 function fightDragon() {
   fighting = 4
-  scene.style.backgroundImage = "url(images/dragonArea.jpeg)"
+  scene.style.backgroundImage = "url(images/dragonArea.webp)"
   goFight()
 }
 
