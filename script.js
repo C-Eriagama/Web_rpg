@@ -397,6 +397,7 @@ function monsterAttack() {
     buttons[i].disabled = true;
   }
   let endLeft = 270 - monsterImage.width
+  endLeft = fighting === 4 ? endLeft + 60 : endLeft
   document.documentElement.style.setProperty('--my-end-left', endLeft.toString() + 'px')
   monsterImage.classList.add('monsterAttack')
   monsterDamage.innerText = ' ' + damageTaken
