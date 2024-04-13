@@ -302,6 +302,14 @@ function buyHp() {
   updateHp(hp + 10)
   text.innerText = 'You have bought extra 10 health.'
   updateShopButtons();
+
+  easterEggIndicator.innerText = "Health Bought!\n + 10 health"
+  easterEggIndicator.style.color = "green"
+  easterEggIndicator.classList.add('damageAnimation')
+  setTimeout(() => {
+    easterEggIndicator.classList.remove('damageAnimation')
+  }, 1000)
+
 }
 
 function buyWeapon() {
@@ -320,6 +328,14 @@ function buyWeapon() {
   } else {
     button2.innerText = "Buy weapon (" + weapons[currentWeapon + 1].cost + " gold)"
   }
+
+  easterEggIndicator.innerText = "Weapon Bought!\n power: " + power
+  easterEggIndicator.style.color = "gold"
+  easterEggIndicator.classList.add('damageAnimation')
+  setTimeout(() => {
+    easterEggIndicator.classList.remove('damageAnimation')
+  }, 1000)
+
 
   updateShopButtons();
 
@@ -489,7 +505,7 @@ function dodge() {
       for (let i = 0; i < 3; i++) {
         buttons[i].disabled = false;
       }
-    }, 1000)
+    }, 400)
 
   } else {
     text.innerText = "You failed to dodge the attack. "
@@ -529,6 +545,14 @@ function defeatMonster() {
     button2.disabled = true; // Can't go to jungle until cave is cleared out
   }
   player.style.visibility = 'visible'
+
+  easterEggIndicator.innerText = "Monster Defeated!\n+ " + xpGained + " XP\n+ " + goldGained + " gold!"
+  easterEggIndicator.style.color = "gold"
+  easterEggIndicator.classList.add('damageAnimation')
+  setTimeout(() => {
+    easterEggIndicator.classList.remove('damageAnimation')
+  }, 1000)
+
 }
 
 
