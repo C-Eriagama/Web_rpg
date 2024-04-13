@@ -24,7 +24,7 @@ body {
 #scene {
   height: 320px; 
   width: 480px;
-  background-image: url(images/town3.jpeg);
+  background-image: url(images/town.jpeg);
   background-size: cover;
   position: relative;
 }
@@ -36,7 +36,7 @@ body {
 }
 
 #controls button{
-  width: 24.3%;
+  width: 32.75%;
   height: 30px;
   border-radius: 5px;
   background-color:rgb(194, 149, 65);
@@ -104,6 +104,7 @@ body {
   width: 150px;
   height: 150px;
   visibility: hidden;
+  z-index: 1;
 }
 
 #monster{
@@ -131,4 +132,45 @@ body {
   color:rgb(189, 189, 189);
 }
 
+.playerAttack {
+  animation-name: move-right;
+  animation-duration: 0.5s;
+  animation-iteration-count: 2;
+  animation-direction: alternate;
+}
+
+@keyframes move-right {
+
+  from {
+    left: 0px;
+    transform: rotate(5deg)
+  }
+
+  to {
+    left: 25%;
+  }
+}
+
+:root{
+  --my-end-left: 200px;
+}
+
+.monsterAttack {
+  animation-name: move-left;
+  animation-duration: 0.5s;
+  animation-iteration-count: 2;
+  animation-direction: alternate;
+}
+
+@keyframes move-left {
+
+  from {
+    right: 0px;
+    transform: rotate(-5deg)
+  }
+
+  to {
+    right: var(--my-end-left);
+  }
+}
 

@@ -389,6 +389,20 @@ function monsterAttack() {
     updateHp(hp - damageTaken)
     text.innerText += " you for " + damageTaken + " damage."
   }
+
+  //animation
+  for (let i = 0; i < 3; i++) {
+    buttons[i].disabled = true;
+  }
+  let endLeft = 270 - monsterImage.width
+  document.documentElement.style.setProperty('--my-end-left', endLeft.toString() + 'px')
+  monsterImage.classList.add('monsterAttack')
+  setTimeout(() => {
+    monsterImage.classList.remove('monsterAttack')
+    for (let i = 0; i < 3; i++) {
+      buttons[i].disabled = false;
+    }
+  }, 1000)
 }
 
 function attack() {
@@ -416,8 +430,15 @@ function attack() {
     text.innerText += ' and you miss.'
   }
 
+  player.classList.add('playerAttack')
   monsterAttack()
-  fightOutcome()
+
+  //remove animation class after 1 second
+  setTimeout(() => {
+    player.classList.remove('playerAttack')
+    fightOutcome()
+  }, 1000)
+
 }
 
 function getMonsterAttackValue(level) {
@@ -449,7 +470,10 @@ function fightOutcome() {
     lose()
   } else if (monsterHealth <= 0) {
     fighting === monsters.length - 1 ? winGame() : defeatMonster()
+  } else {
+    return false;
   }
+  return true;
 }
 
 function defeatMonster() {
