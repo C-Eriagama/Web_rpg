@@ -27,6 +27,7 @@ const player = document.querySelector('#player')
 const monsterImage = document.querySelector('#monster')
 const playerDamage = document.querySelector('#playerDamage')
 const monsterDamage = document.querySelector('#monsterDamage')
+const easterEggIndicator = document.querySelector('#easterEggIndicator')
 
 const weapons = [
   {
@@ -387,21 +388,25 @@ function monsterAttack() {
   if (Math.random() < 0.05) {
     damageTaken = 0
     text.innerText += " but you dodged the attack."
+    monsterDamage.innerText = 'miss'
   } else {
     updateHp(hp - damageTaken)
     text.innerText += " you for " + damageTaken + " damage."
+    monsterDamage.innerText = ' ' + damageTaken
   }
 
   //animation
   for (let i = 0; i < 3; i++) {
     buttons[i].disabled = true;
   }
-  let endLeft = 270 - monsterImage.width
-  endLeft = fighting === 4 ? endLeft + 60 : endLeft
+
+  let endLeft = -220 + monsterImage.width
+  endLeft = fighting === 4 ? endLeft - 80 : endLeft
   document.documentElement.style.setProperty('--my-end-left', endLeft.toString() + 'px')
   monsterImage.classList.add('monsterAttack')
-  monsterDamage.innerText = ' ' + damageTaken
+  monsterDamage.style.color = 'red'
   monsterDamage.classList.add('damageAnimation')
+
   setTimeout(() => {
     monsterImage.classList.remove('monsterAttack')
     monsterDamage.classList.remove('damageAnimation')
@@ -468,10 +473,30 @@ function dodge() {
     if (Math.random() < 0.95) {
       updateHp(hp + 5) // 95% chance to gain 5 hp on a dodge
     }
+
+    for (let i = 0; i < 3; i++) {
+      buttons[i].disabled = true;
+    }
+
+    monsterDamage.innerText = "dodge"
+    monsterDamage.style.color = "gray"
+    monsterDamage.classList.add('damageAnimation')
+    player.classList.add('dodgeAnimation')
+
+    setTimeout(() => {
+      player.classList.remove('dodgeAnimation')
+      monsterDamage.classList.remove('damageAnimation')
+      for (let i = 0; i < 3; i++) {
+        buttons[i].disabled = false;
+      }
+    }, 1000)
+
   } else {
     text.innerText = "You failed to dodge the attack. "
     monsterAttack()
   }
+
+
   fightOutcome()
 }
 
@@ -567,13 +592,22 @@ function pick(guess) {
     let value = Math.floor(Math.random() * 20) * count + 10
     text.innerText += "\nCorrect! You win " + value + " gold!"
     updateGold(gold + value)
+    easterEggIndicator.innerText = "Easter Egg Found!\n+ " + value + " gold!"
+    easterEggIndicator.style.color = "gold"
   } else {
     text.innerText += "\nWrong! You lose 10 health!"
+    easterEggIndicator.innerText = "Caught in Trap!\n- 10 health!"
+    easterEggIndicator.style.color = "red"
     updateHp(hp - 10)
     if (hp <= 0) {
       lose()
     }
   }
+
+  easterEggIndicator.classList.add('damageAnimation')
+  setTimeout(() => {
+    easterEggIndicator.classList.remove('damageAnimation')
+  }, 1000)
 
   // Change buttons to go to town
   easterEggButtons.style.display = "none"
