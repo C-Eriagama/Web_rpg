@@ -162,6 +162,7 @@ const locations = [
   },
   {
     name: locationNames.Win,
+    image: "images/win.jpeg",
     'button text': ['Replay?', 'Replay?', 'Replay?'],
     'button functions': [restart, restart, restart],
     text: 'YOU DEFEAT THE DRAGON! THE TOWN IS SAVED AND YOU WIN THE GAME!'
